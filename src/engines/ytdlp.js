@@ -18,7 +18,7 @@ function run(args, { maxBuffer = 64 * 1024 * 1024 } = {}) {
 }
 
 export async function resolve(url) {
-  const j = JSON.parse(await run([...COMMON, '-J', url]));
+  const j = JSON.parse(await run([...COMMON, '-J', '--', url]));
   const shortEdges = (j.formats || [])
     .filter(f => f.width && f.height).map(f => Math.min(f.width, f.height));
   return {
@@ -38,7 +38,7 @@ export async function resolve(url) {
 // Download best video locally -> temp file path.
 export async function downloadVideo(url, stamp) {
   const base = path.join(DOWNLOADS, stamp);
-  await run([...COMMON, '-f', 'bv*+ba/b', '--merge-output-format', 'mp4', '-o', `${base}.%(ext)s`, url]);
+  await run([...COMMON, '-f', 'bv*+ba/b', '--merge-output-format', 'mp4', '-o', `${base}.%(ext)s`, '--', url]);
   const f = fs.readdirSync(DOWNLOADS).find(n => n.startsWith(stamp));
   return path.join(DOWNLOADS, f);
 }
@@ -46,6 +46,6 @@ export async function downloadVideo(url, stamp) {
 // Extract MP3 from the post's audio -> temp file path.
 export async function downloadAudio(url, stamp) {
   const base = path.join(DOWNLOADS, stamp);
-  await run([...COMMON, '-x', '--audio-format', 'mp3', '--audio-quality', '0', '-o', `${base}.%(ext)s`, url]);
+  await run([...COMMON, '-x', '--audio-format', 'mp3', '--audio-quality', '0', '-o', `${base}.%(ext)s`, '--', url]);
   return `${base}.mp3`;
 }

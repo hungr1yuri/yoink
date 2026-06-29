@@ -3,6 +3,7 @@ import express from 'express';
 import { PORT, PUBLIC } from './config.js';
 import { resolve } from './lib/resolve.js';
 import { sendVideo, sendAudio, sendImages } from './lib/download.js';
+import { isTikTokUrl } from './lib/util.js';
 
 const app = express();
 app.use(express.json());
@@ -23,6 +24,7 @@ app.get('/api/download', async (req, res) => {
   const kind = (req.query.kind || 'video').toString();
   const caption = (req.query.caption || '').toString();
   if (!url) return res.status(400).send('Missing url');
+  if (!isTikTokUrl(url)) return res.status(400).send('Not a valid TikTok link.');
   try {
     if (kind === 'images') return await sendImages(url, caption, res);
     if (kind === 'audio') return await sendAudio(url, caption, res);
