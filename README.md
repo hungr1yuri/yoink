@@ -33,6 +33,28 @@ npm start        # http://localhost:3000
 Open the page, paste a link, pick a format. If a download breaks after some
 TikTok change, refresh the local fallback with `npm run update-engine`.
 
+## Security
+
+`npm start` runs the whole thing inside a macOS sandbox (Seatbelt). The server
+and anything it spawns are blocked from reading your SSH keys, Keychain, GitHub
+token, browser data and cookies, and your Desktop/Downloads/Pictures, and from
+writing any login or startup item. The sandbox is inherited by child processes,
+so a dependency can't escape it by launching a shell. Normal stuff (network, the
+project folder, the bundled yt-dlp/ffmpeg) keeps working.
+
+This matters because `@tobyg74/tiktok-api-dl` is the one less-audited dependency
+in the chain. The sandbox means that even in a worst case it can't touch your
+credentials or persist on the machine.
+
+Notes:
+- macOS only. On other systems `npm start` runs without the sandbox and prints a
+  notice.
+- The project lives in `~/Documents`, so files elsewhere in Documents stay
+  readable to the app. Everything else personal is off-limits.
+- Escape hatch if you ever need it: `npm run start:raw` (no sandbox), or
+  `YOINK_NO_SANDBOX=1 npm start`.
+- The profile lives in `scripts/yoink.sb` if you want to tighten it further.
+
 ## How it gets the file
 
 Two engines, picked automatically:

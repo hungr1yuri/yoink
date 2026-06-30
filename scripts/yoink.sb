@@ -1,0 +1,56 @@
+;; yoink macOS sandbox (Seatbelt) profile.
+;; Strategy: allow normal operation, then subtract access to anything sensitive.
+;; This whole sandbox is inherited by every child process yoink spawns
+;; (yt-dlp, ffmpeg, or anything a dependency might try to launch), and it
+;; cannot be removed from inside. __HOME__ and __PROJECT__ are filled in at
+;; launch time by scripts/start.mjs.
+
+(version 1)
+(allow default)
+
+;; --- credentials and secrets: no read, no write ---
+(deny file-read* file-write*
+  (subpath "__HOME__/.ssh")
+  (subpath "__HOME__/.aws")
+  (subpath "__HOME__/.gnupg")
+  (subpath "__HOME__/.config/gh")
+  (subpath "__HOME__/.docker")
+  (subpath "__HOME__/.kube")
+  (subpath "__HOME__/Library/Keychains")
+  (subpath "/Library/Keychains")
+  (subpath "__HOME__/Library/Cookies")
+  (subpath "__HOME__/Library/Application Support/Google/Chrome")
+  (subpath "__HOME__/Library/Application Support/BraveSoftware")
+  (subpath "__HOME__/Library/Application Support/Firefox")
+  (subpath "__HOME__/Library/Application Support/Microsoft Edge")
+  (subpath "__HOME__/Library/Application Support/Arc")
+  (subpath "__HOME__/Library/Messages")
+  (literal "__HOME__/.netrc")
+  (literal "__HOME__/.npmrc")
+  (literal "__HOME__/.gitconfig")
+  (literal "__HOME__/.zsh_history")
+  (literal "__HOME__/.bash_history"))
+
+;; --- personal files: block reading these folders entirely. (On this macOS a
+;;     deny beats a later allow, so we can't deny ~/Documents and carve the
+;;     project back out; the project lives in ~/Documents, so that one stays
+;;     readable. Everything else personal is blocked.) ---
+(deny file-read*
+  (subpath "__HOME__/Desktop")
+  (subpath "__HOME__/Downloads")
+  (subpath "__HOME__/Pictures")
+  (subpath "__HOME__/Movies")
+  (subpath "__HOME__/Music"))
+
+;; --- persistence: block writing anything that runs at login/startup ---
+(deny file-write*
+  (subpath "__HOME__/Library/LaunchAgents")
+  (subpath "__HOME__/Library/LaunchDaemons")
+  (subpath "/Library/LaunchAgents")
+  (subpath "/Library/LaunchDaemons")
+  (literal "__HOME__/.zshrc")
+  (literal "__HOME__/.zprofile")
+  (literal "__HOME__/.zshenv")
+  (literal "__HOME__/.bashrc")
+  (literal "__HOME__/.bash_profile")
+  (literal "__HOME__/.profile"))

@@ -4,7 +4,8 @@
   "description": "Grab the original full-bitrate TikTok file, no watermark.",
   "main": "src/server.js",
   "scripts": {
-    "start": "node src/server.js",
+    "start": "node scripts/start.mjs",
+    "start:raw": "node src/server.js",
     "setup": "node scripts/setup.mjs",
     "postinstall": "node scripts/setup.mjs",
     "update-engine": "./bin/yt-dlp -U"

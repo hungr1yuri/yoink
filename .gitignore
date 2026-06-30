@@ -3,3 +3,4 @@ downloads/
 bin/
 *.log
 .DS_Store
+.yoink-sandbox.sb
