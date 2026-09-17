@@ -3,7 +3,7 @@ import express from 'express';
 import { PORT, PUBLIC } from './config.js';
 import { resolve } from './lib/resolve.js';
 import { sendVideo, sendAudio, sendImages } from './lib/download.js';
-import { isTikTokUrl } from './lib/util.js';
+import { isSupportedUrl } from './lib/util.js';
 
 const app = express();
 app.use(express.json());
@@ -24,11 +24,11 @@ app.get('/api/download', async (req, res) => {
   const kind = (req.query.kind || 'video').toString();
   const caption = (req.query.caption || '').toString();
   if (!url) return res.status(400).send('Missing url');
-  if (!isTikTokUrl(url)) return res.status(400).send('Not a valid TikTok link.');
+  if (!isSupportedUrl(url)) return res.status(400).send('Not a TikTok or YouTube link.');
   try {
     if (kind === 'images') return await sendImages(url, caption, res);
     if (kind === 'audio') return await sendAudio(url, caption, res);
-    return await sendVideo(url, caption, res);
+    return await sendVideo(url, caption, res, kind === 'video-max' ? 'max' : 'h264');
   } catch (e) {
     if (!res.headersSent) res.status(500).send(e.message || 'Download failed.');
     else res.end();
@@ -36,5 +36,5 @@ app.get('/api/download', async (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`\n  yoink  ->  http://localhost:${PORT}   (HD source enabled)\n`);
+  console.log(`\n  yoink  ->  http://localhost:${PORT}   (TikTok HD source + YouTube)\n`);
 });

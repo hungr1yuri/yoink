@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>yoink / full-quality TikTok, no watermark</title>
+  <title>yoink / full-quality TikTok and YouTube, no watermark</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
@@ -19,11 +19,12 @@
 
   <main class="stage">
     <section class="hero">
-      <p class="eyebrow">TikTok&nbsp;↓ &nbsp;/&nbsp; original file, full bitrate</p>
+      <p class="eyebrow">TikTok&nbsp;+&nbsp;YouTube&nbsp;↓ &nbsp;/&nbsp; the best file each one has</p>
       <h1 class="display">Paste.<br />Download.<br /><em>Done.</em></h1>
       <p class="lede">
-        Grabs the same high-bitrate file TikTok keeps on its servers, with no
-        watermark on it. Everything runs on your own machine.
+        From TikTok, the same high-bitrate file its own servers keep, with no
+        watermark, plus the frames of a photo slideshow as a zip. From YouTube,
+        videos and Shorts up to 4K. Everything runs on your own machine.
       </p>
     </section>
 
@@ -32,7 +33,7 @@
         <label for="url" class="field-label">01 / paste link</label>
         <div class="field-row">
           <input id="url" name="url" type="text" inputmode="url"
-                 placeholder="https://www.tiktok.com/@user/video/…" spellcheck="false" />
+                 placeholder="tiktok.com/@user/video/… or youtube.com/shorts/…" spellcheck="false" />
           <button id="go" type="submit" class="go">▸ GET</button>
         </div>
         <p id="status" class="status" role="status" aria-live="polite"></p>
@@ -64,7 +65,7 @@
 
   <footer class="foot">
     <span>Built for personal &amp; educational use. Respect creators' copyright.</span>
-    <span class="foot-mark">engine: tiktok-api-dl · fallback: yt-dlp</span>
+    <span class="foot-mark">engines: tiktok-api-dl · yt-dlp</span>
   </footer>
 
   <script src="/app.js"></script>
